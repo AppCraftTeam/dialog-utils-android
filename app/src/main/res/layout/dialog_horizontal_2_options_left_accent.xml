@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rounded"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDialogHeader"
+            style="@style/AppTheme.TextView.SemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:textSize="18sp"
+            android:textColor="@color/colorText"
+            android:textAlignment="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="Header"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDialogMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/colorText"
+            android:textAlignment="center"
+            tools:text="Message"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/buttonDialogFirstAction"
+                style="@style/AppTheme.TextView.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_rounded_primary_small"
+                android:gravity="center"
+                android:textColor="@color/colorTextWhite"
+                android:includeFontPadding="false"
+                android:textSize="14sp"
+                tools:text="first"/>
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/buttonDialogSecondAction"
+                style="@style/AppTheme.TextView.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_rounded_gray_small"
+                android:gravity="center"
+                android:textColor="@color/colorText"
+                android:includeFontPadding="false"
+                android:textSize="14sp"
+                tools:text="second"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

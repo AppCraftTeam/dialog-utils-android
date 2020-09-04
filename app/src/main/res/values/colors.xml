@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#664EFF</color>
+    <color name="colorPrimaryDark">#664EFF</color>
+    <color name="colorAccent">#664EFF</color>
+    <color name="colorText">#000000</color>
+    <color name="colorTextWhite">#FFFFFF</color>
+    <color name="colorBackgroundGray">#F4F4F4</color>
+
+<!--    <color name="colorPrimaryLight">#EEEEFF</color>-->
+<!--    <color name="colorPrimaryTransparent">#1A664EFF</color>-->
+<!--    <color name="colorAccentTransparent">#BF664EFF</color>-->
+<!--    <color name="colorAccentLight">#F6F7FB</color>-->
+<!--    <color name="colorTextDark">#9EA3B3</color>-->
+<!--    <color name="colorTextLight">#D6D7DA</color>-->
+<!--    <color name="colorTextWhiteTransparent">#80FFFFFF</color>-->
+<!--    <color name="colorBackground">#FFFFFF</color>-->
+<!--    <color name="colorCameraProgress">#FF2D55</color>-->
+<!--    <color name="colorBackgroundLight">#FAFAFA</color>-->
+<!--    <color name="colorBackgroundDark">#002534</color>-->
+<!--    <color name="colorBackgroundDarkSecondary">#292B33</color>-->
+<!--    <color name="colorBackgroundDarkGray">#D6D7DA</color>-->
+<!--    <color name="colorBackgroundDarkGrayTransparent">#80D5D5D5</color>-->
+<!--    <color name="colorBackgroundSemiTransparent">#BFFFFFFF</color>-->
+<!--    <color name="colorBackgroundTransparent">#33FFFFFF</color>-->
+<!--    <color name="colorBackgroundDarkTransparent">#80002534</color>-->
+<!--    <color name="colorBackgroundBlackTransparent">#33000000</color>-->
+<!--    <color name="colorLink">#4642FF</color>-->
+<!--    <color name="colorNotification">#0b0c0e</color>-->
+<!--    <color name="colorTransparent">#00FFFFFF</color>-->
+<!--    <color name="colorWhite">#FFFFFF</color>-->
+<!--    <color name="colorBlack">#000000</color>-->
+<!--    <color name="colorRed">#FF414D</color>-->
+<!--    <color name="colorPink">#F564AA</color>-->
+<!--    <color name="colorPinkTransparent">#26F564AA</color>-->
+<!--    <color name="colorOrange">#F6A331</color>-->
+<!--    <color name="colorBlue">#664EFF</color>-->
+<!--    <color name="colorBlueTransparent">#267886FF</color>-->
+<!--    <color name="colorGreen">#4CD964</color>-->
+<!--    <color name="colorPhotoFilter">#66000000</color>-->
+<!--    <color name="colorGalleryPopupBackground">#9A000000</color>-->
+<!--    <color name="colorNavigationInactive">#D5D5D5</color>-->
+<!--    <color name="colorNavigationBarAlternative">#FF0A0D10</color>-->
+<!--    <color name="storyProgressBackground">#50EFEFEF</color>-->
+<!--    <color name="ic_launcher_background">#FFFFFF</color>-->
+</resources>

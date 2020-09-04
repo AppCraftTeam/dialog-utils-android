@@ -1,0 +1,63 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 22
+        targetSdkVersion 29
+        versionCode 1
+        versionName "0.1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError true
+        checkAllWarnings true
+        ignoreWarnings false
+        warningsAsErrors false
+        checkDependencies true
+        htmlReport true
+        explainIssues true
+        noLines false
+        textOutput 'stdout'
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    // AndroidX
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    // FastAdapter
+    def fastAdapterVersion = '5.2.2'
+    implementation "com.mikepenz:fastadapter:${fastAdapterVersion}"
+    implementation "com.mikepenz:fastadapter-extensions-diff:${fastAdapterVersion}"
+    implementation "com.mikepenz:fastadapter-extensions-drag:${fastAdapterVersion}"
+    implementation "com.mikepenz:fastadapter-extensions-scroll:${fastAdapterVersion}"
+    implementation "com.mikepenz:fastadapter-extensions-swipe:${fastAdapterVersion}"
+    implementation "com.mikepenz:fastadapter-extensions-ui:${fastAdapterVersion}"
+    implementation "com.mikepenz:fastadapter-extensions-utils:${fastAdapterVersion}"
+}
