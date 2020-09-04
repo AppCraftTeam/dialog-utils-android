@@ -16,7 +16,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textViewDialogHeader"
-            style="@style/AppTheme.TextView.SemiBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
@@ -42,7 +41,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/buttonDialogFirstAction"
-            style="@style/AppTheme.TextView.SemiBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -60,7 +58,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/buttonDialogSecondAction"
-            style="@style/AppTheme.TextView.SemiBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -78,7 +75,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/buttonDialogThirdAction"
-            style="@style/AppTheme.TextView.SemiBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
