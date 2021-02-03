@@ -8,7 +8,7 @@ import com.mikepenz.fastadapter.items.AbstractItem
 import pro.appcraft.lib.utils.dialog.BottomDialogAction
 import pro.appcraft.lib.utils.dialog.R
 
-internal class BottomDialogButtonItem(
+class BottomDialogButtonItem(
     val bottomDialogAction: BottomDialogAction
 ) : AbstractItem<BottomDialogButtonItem.ViewHolder>() {
     override val type: Int = R.id.bottomDialogButtonItem
