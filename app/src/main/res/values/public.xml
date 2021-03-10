@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <public name="AppTheme.Dialog.Alert" type="style" />
+    <public name="CustomBottomSheetDialog" type="style" />
+    <public name="CustomBottomSheetDialog.NoFloat" type="style" />
+</resources>
