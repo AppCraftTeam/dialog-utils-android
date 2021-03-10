@@ -7,7 +7,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +29,7 @@ fun Context.showAlertDialog(
     onCancelListener: (() -> Unit)? = null,
     onInputListener: ((String) -> Unit)? = null,
     actions: List<AlertDialogAction>
-) {
+) : AlertDialog {
     val dialogView = View.inflate(this, parameters.layoutResId, null)
 
     val alertDialogBuilder = AlertDialog.Builder(this, R.style.AppTheme_Dialog_Alert)
@@ -43,20 +42,24 @@ fun Context.showAlertDialog(
 
     parameters.headerViewId?.let {
         val textViewDialogHeader = dialogView.findViewById<TextView>(it)
-        if (header.isNullOrBlank()) {
-            textViewDialogHeader.visibility = View.GONE
-        } else {
-            textViewDialogHeader.visibility = View.VISIBLE
-            textViewDialogHeader.text = header
+        textViewDialogHeader?.apply {
+            if (header.isNullOrBlank()) {
+                visibility = View.GONE
+            } else {
+                visibility = View.VISIBLE
+                text = header
+            }
         }
     }
     parameters.messageViewId?.let {
         val textViewDialogMessage = dialogView.findViewById<TextView>(it)
-        if (message.isBlank()) {
-            textViewDialogMessage.visibility = View.GONE
-        } else {
-            textViewDialogMessage.visibility = View.VISIBLE
-            textViewDialogMessage.text = header
+        textViewDialogMessage?.apply {
+            if (message.isBlank()) {
+                visibility = View.GONE
+            } else {
+                visibility = View.VISIBLE
+                text = header
+            }
         }
     }
     for (i in (parameters.buttonViewIds.indices)) {
@@ -90,23 +93,26 @@ fun Context.showAlertDialog(
             editTextDialogInput?.requestFocus()
         }
     }
+    return dialog
 }
 
 fun Context.showBottomDialog(
-    @LayoutRes layoutResId: Int = R.layout.bottom_dialog,
-    @LayoutRes buttonLayoutResId: Int = R.layout.item_bottom_dialog_button,
+    parameters: BottomDialogParameters = BottomDialogParameters(),
     header: String? = null,
     cancellable: Boolean = true,
-    paddingBetweenItems: Boolean = true,
     onCancelListener: (() -> Unit)? = null,
     actions: List<BottomDialogAction>
-) {
+) : BottomSheetDialog {
     val dialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
-    val rootView = View.inflate(this, layoutResId, null)
-    dialog.setContentView(rootView)
-    rootView.setOnClickListener { dialog.cancel() }
+    val dialogView = View.inflate(this, parameters.layoutResId, null)
+    dialog.setContentView(dialogView)
+    dialogView.setOnClickListener { dialog.cancel() }
+    dialog.setCancelable(cancellable)
+    dialog.setOnCancelListener {
+        onCancelListener?.invoke()
+    }
 
-    val recyclerView: RecyclerView = rootView.findViewById(R.id.recyclerViewDialog)
+    val recyclerView: RecyclerView = dialogView.findViewById(parameters.recyclerViewId)
     val itemAdapter: ItemAdapter<IItem<*>> = ItemAdapter()
     val adapterActions: FastAdapter<IItem<*>> = FastAdapter.with(itemAdapter)
     adapterActions.setHasStableIds(true)
@@ -124,7 +130,7 @@ fun Context.showBottomDialog(
         layoutManager = LinearLayoutManager(context)
         adapter = adapterActions
         itemAnimator = null
-        if (paddingBetweenItems) {
+        if (parameters.paddingBetweenItems) {
             addItemDecoration(
                 EmptyDividerDecoration(
                     this@showBottomDialog,
@@ -137,23 +143,25 @@ fun Context.showBottomDialog(
     itemAdapter.setNewList(
         actions.map {
             BottomDialogButtonItem(
-                buttonLayoutResId = buttonLayoutResId,
+                buttonLayoutResId = parameters.buttonLayoutResId,
                 bottomDialogAction = it
             )
         }
     )
 
-    val textViewDialogHeader = rootView.findViewById<TextView>(R.id.textViewDialogHeader)
-    textViewDialogHeader?.apply {
-        if (header.isNullOrBlank()) {
-            visibility = View.GONE
-        } else {
-            visibility = View.VISIBLE
-            text = header
+    parameters.headerViewId?.let {
+        val textViewDialogHeader = dialogView.findViewById<TextView>(it)
+        textViewDialogHeader?.apply {
+            if (header.isNullOrBlank()) {
+                visibility = View.GONE
+            } else {
+                visibility = View.VISIBLE
+                text = header
+            }
         }
     }
 
-    val behavior = BottomSheetBehavior.from(rootView.parent as View)
+    val behavior = BottomSheetBehavior.from(dialogView.parent as View)
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
     behavior.skipCollapsed = true
     behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -166,11 +174,6 @@ fun Context.showBottomDialog(
         override fun onSlide(view: View, v: Float) {}
     })
 
-    dialog.setCancelable(cancellable)
-    dialog.setOnCancelListener {
-        onCancelListener?.invoke()
-    }
-
     dialog.window
         ?.findViewById<View>(com.google.android.material.R.id.container)
         ?.fitsSystemWindows = false
@@ -179,16 +182,18 @@ fun Context.showBottomDialog(
             it.systemUiVisibility = it.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
-    val layoutDialogContent = rootView.findViewById<View>(R.id.layoutDialogContent)
-    layoutDialogContent.setOnApplyWindowInsetsListener { _, windowInsets ->
-        layoutDialogContent.setPaddingRelative(
-            layoutDialogContent.paddingStart,
-            layoutDialogContent.paddingTop,
-            layoutDialogContent.paddingEnd,
-            windowInsets.systemWindowInsetBottom
-        )
-        windowInsets
+    dialogView.findViewById<View>(parameters.contentViewId)?.apply {
+        setOnApplyWindowInsetsListener { _, windowInsets ->
+            setPaddingRelative(
+                paddingStart,
+                paddingTop,
+                paddingEnd,
+                windowInsets.systemWindowInsetBottom
+            )
+            windowInsets
+        }
     }
 
     dialog.show()
+    return dialog
 }

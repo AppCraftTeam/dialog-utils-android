@@ -11,7 +11,6 @@ data class AlertDialogParameters(
     val inputType: AlertDialogInputType = AlertDialogInputType.NONE,
     @IdRes val inputViewId: Int? = null,
 ) {
-
     companion object {
         val HORIZONTAL_2_OPTIONS_LEFT_ACCENT = AlertDialogParameters(
             layoutResId = R.layout.dialog_horizontal_2_options_left_accent,
