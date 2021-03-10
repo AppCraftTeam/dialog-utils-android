@@ -1,19 +1,15 @@
-package pro.appcraft.lib.utils.dialog.view
+package pro.appcraft.lib.utils.dialog.bottom
 
-import android.content.Context
 import android.graphics.Rect
 import android.view.View
-import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 internal class EmptyDividerDecoration(
-    context: Context,
-    @DimenRes cardInsets: Int,
+    private val spacing: Int,
     private val applyOutsideDecoration: Boolean = true
 ) : RecyclerView.ItemDecoration() {
-    private val spacing: Int = context.resources.getDimensionPixelSize(cardInsets)
     private var displayMode: Int = -1
 
     override fun getItemOffsets(

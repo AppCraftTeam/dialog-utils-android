@@ -1,4 +1,4 @@
-package pro.appcraft.lib.utils.dialog
+package pro.appcraft.lib.utils.dialog.alert
 
 import android.text.InputType
 

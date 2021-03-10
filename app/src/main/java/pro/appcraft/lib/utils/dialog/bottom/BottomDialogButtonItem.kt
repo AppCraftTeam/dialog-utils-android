@@ -1,4 +1,4 @@
-package pro.appcraft.lib.utils.dialog.item
+package pro.appcraft.lib.utils.dialog.bottom
 
 import android.graphics.Typeface
 import android.view.View
@@ -6,7 +6,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatTextView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import pro.appcraft.lib.utils.dialog.BottomDialogAction
 import pro.appcraft.lib.utils.dialog.R
 
 class BottomDialogButtonItem(

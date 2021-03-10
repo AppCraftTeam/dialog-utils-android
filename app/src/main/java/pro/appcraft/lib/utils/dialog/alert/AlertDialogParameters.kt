@@ -1,7 +1,8 @@
-package pro.appcraft.lib.utils.dialog
+package pro.appcraft.lib.utils.dialog.alert
 
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
+import pro.appcraft.lib.utils.dialog.R
 
 data class AlertDialogParameters(
     @LayoutRes val layoutResId: Int,

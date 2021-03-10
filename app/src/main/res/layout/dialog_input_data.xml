@@ -5,7 +5,7 @@
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_rounded_small"
+    android:background="@drawable/bg_rounded_4"
     android:padding="16dp">
 
     <LinearLayout
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_rounded_outline_accent_small"
+            android:background="@drawable/bg_rounded_outline_accent_4"
             android:gravity="center"
             android:textColor="@color/colorText"
             android:textSize="14sp"
@@ -62,7 +62,8 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_rounded_primary_small"
+            android:background="@drawable/bg_rounded_4"
+            android:backgroundTint="@color/colorPrimary"
             android:gravity="center"
             android:textColor="@color/colorTextWhite"
             android:textSize="14sp"

@@ -8,6 +8,7 @@
     android:padding="16dp"
     android:textColor="@color/colorText"
     android:textSize="14sp"
-    android:background="@drawable/bg_rounded_gray_small"
+    android:background="@drawable/bg_rounded_4"
+    android:backgroundTint="@color/colorBackgroundGray"
     android:includeFontPadding="false"
     tools:text="Пункт меню"/>

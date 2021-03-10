@@ -18,8 +18,13 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import pro.appcraft.lib.utils.dialog.item.BottomDialogButtonItem
-import pro.appcraft.lib.utils.dialog.view.EmptyDividerDecoration
+import pro.appcraft.lib.utils.dialog.alert.AlertDialogAction
+import pro.appcraft.lib.utils.dialog.alert.AlertDialogInputType
+import pro.appcraft.lib.utils.dialog.alert.AlertDialogParameters
+import pro.appcraft.lib.utils.dialog.bottom.BottomDialogAction
+import pro.appcraft.lib.utils.dialog.bottom.BottomDialogButtonItem
+import pro.appcraft.lib.utils.dialog.bottom.BottomDialogParameters
+import pro.appcraft.lib.utils.dialog.bottom.EmptyDividerDecoration
 
 fun Context.showAlertDialog(
     parameters: AlertDialogParameters,
@@ -58,7 +63,7 @@ fun Context.showAlertDialog(
                 visibility = View.GONE
             } else {
                 visibility = View.VISIBLE
-                text = header
+                text = message
             }
         }
     }
@@ -97,7 +102,9 @@ fun Context.showAlertDialog(
 }
 
 fun Context.showBottomDialog(
-    parameters: BottomDialogParameters = BottomDialogParameters(),
+    parameters: BottomDialogParameters = BottomDialogParameters(
+        paddingBetweenItems = resources.getDimensionPixelSize(R.dimen.bottom_dialog_items_padding)
+    ),
     header: String? = null,
     cancellable: Boolean = true,
     onCancelListener: (() -> Unit)? = null,
@@ -130,11 +137,10 @@ fun Context.showBottomDialog(
         layoutManager = LinearLayoutManager(context)
         adapter = adapterActions
         itemAnimator = null
-        if (parameters.paddingBetweenItems) {
+        if (parameters.paddingBetweenItems > 0) {
             addItemDecoration(
                 EmptyDividerDecoration(
-                    this@showBottomDialog,
-                    R.dimen.baseline_grid_medium,
+                    parameters.paddingBetweenItems,
                     false
                 )
             )

@@ -1,4 +1,4 @@
-package pro.appcraft.lib.utils.dialog
+package pro.appcraft.lib.utils.dialog.bottom
 
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
