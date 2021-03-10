@@ -2,14 +2,13 @@ package pro.appcraft.lib.utils.dialog
 
 import android.content.Context
 import android.os.Build
-import android.text.InputType
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
+import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +23,7 @@ import pro.appcraft.lib.utils.dialog.item.BottomDialogButtonItem
 import pro.appcraft.lib.utils.dialog.view.EmptyDividerDecoration
 
 fun Context.showAlertDialog(
-    type: AlertDialogType,
+    parameters: AlertDialogParameters,
     header: String? = null,
     message: String,
     cancellable: Boolean = true,
@@ -32,19 +31,7 @@ fun Context.showAlertDialog(
     onInputListener: ((String) -> Unit)? = null,
     actions: List<AlertDialogAction>
 ) {
-    val layout = when (type) {
-        AlertDialogType.ALERT_HORIZONTAL_2_OPTIONS_LEFT_ACCENT -> R.layout.dialog_horizontal_2_options_left_accent
-        AlertDialogType.ALERT_HORIZONTAL_2_OPTIONS_RIGHT_ACCENT -> R.layout.dialog_horizontal_2_options_right_accent
-        AlertDialogType.ALERT_VERTICAL_3_OPTIONS_TOP_ACCENT -> R.layout.dialog_vertical_3_options_top_accent
-        AlertDialogType.ALERT_VERTICAL_2_OPTIONS_TOP_ACCENT -> R.layout.dialog_vertical_2_options_top_accent
-        AlertDialogType.ALERT_VERTICAL_1_OPTION_ACCENT -> R.layout.dialog_vertical_1_option_accent
-        AlertDialogType.ALERT_VERTICAL_1_OPTION_NO_ACCENT -> R.layout.dialog_vertical_1_option_no_accent
-        AlertDialogType.ALERT_INPUT_INT,
-        AlertDialogType.ALERT_INPUT_FLOAT,
-        AlertDialogType.ALERT_INPUT_STRING,
-        AlertDialogType.ALERT_INPUT_STRING_MULTILINE -> R.layout.dialog_input_data
-    }
-    val dialogView = View.inflate(this, layout, null)
+    val dialogView = View.inflate(this, parameters.layoutResId, null)
 
     val alertDialogBuilder = AlertDialog.Builder(this, R.style.AppTheme_Dialog_Alert)
     alertDialogBuilder.setView(dialogView)
@@ -52,74 +39,72 @@ fun Context.showAlertDialog(
     alertDialogBuilder.setOnCancelListener {
         onCancelListener?.invoke()
     }
-    val alertDialog = alertDialogBuilder.create()
+    val dialog = alertDialogBuilder.create()
 
-    val textViewDialogHeader = dialogView.findViewById<AppCompatTextView>(R.id.textViewDialogHeader)
-    if (TextUtils.isEmpty(header)) {
-        textViewDialogHeader.visibility = View.GONE
-    } else {
-        textViewDialogHeader.visibility = View.VISIBLE
-        textViewDialogHeader.text = header
+    parameters.headerViewId?.let {
+        val textViewDialogHeader = dialogView.findViewById<TextView>(it)
+        if (header.isNullOrBlank()) {
+            textViewDialogHeader.visibility = View.GONE
+        } else {
+            textViewDialogHeader.visibility = View.VISIBLE
+            textViewDialogHeader.text = header
+        }
     }
-
-    val textViewDialogMessage = dialogView.findViewById<AppCompatTextView>(R.id.textViewDialogMessage)
-    textViewDialogMessage.text = message
-
-    val buttonIds = listOf(
-        R.id.buttonDialogFirstAction,
-        R.id.buttonDialogSecondAction,
-        R.id.buttonDialogThirdAction
-    )
-    for (i in (0 until type.optionsCount)) {
+    parameters.messageViewId?.let {
+        val textViewDialogMessage = dialogView.findViewById<TextView>(it)
+        if (message.isBlank()) {
+            textViewDialogMessage.visibility = View.GONE
+        } else {
+            textViewDialogMessage.visibility = View.VISIBLE
+            textViewDialogMessage.text = header
+        }
+    }
+    for (i in (parameters.buttonViewIds.indices)) {
         actions.getOrNull(i)?.let { action ->
-            val button = dialogView.findViewById<AppCompatTextView>(buttonIds[i])
+            val button = dialogView.findViewById<TextView>(parameters.buttonViewIds[i])
             button.text = action.text
             button.setOnClickListener {
-                action.callback.invoke(alertDialog)
+                action.callback(dialog)
+            }
+        }
+    }
+    var editTextDialogInput: EditText? = null
+    parameters.inputViewId?.let {
+        editTextDialogInput = dialogView.findViewById<EditText>(it)?.apply {
+            inputType = parameters.inputType.value
+            gravity = when (parameters.inputType) {
+                AlertDialogInputType.STRING_MULTILINE -> Gravity.START
+                else -> Gravity.CENTER
+            }
+            doOnTextChanged { _, _, _, _ ->
+                onInputListener?.invoke(text.toString())
             }
         }
     }
 
-    val editTextDialogInput = dialogView.findViewById<AppCompatEditText>(R.id.editTextDialogInput)
-    editTextDialogInput?.inputType = when (type) {
-        AlertDialogType.ALERT_INPUT_INT -> InputType.TYPE_CLASS_NUMBER
-        AlertDialogType.ALERT_INPUT_FLOAT -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        AlertDialogType.ALERT_INPUT_STRING -> InputType.TYPE_CLASS_TEXT
-        AlertDialogType.ALERT_INPUT_STRING_MULTILINE -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-        else -> InputType.TYPE_NULL
-    }
-    editTextDialogInput?.gravity = when (type) {
-        AlertDialogType.ALERT_INPUT_STRING_MULTILINE -> Gravity.START
-        else -> Gravity.CENTER
-    }
-    editTextDialogInput?.doOnTextChanged { _, _, _, _ ->
-        onInputListener?.invoke(editTextDialogInput.text.toString())
-    }
-
-    when (type) {
-        AlertDialogType.ALERT_INPUT_INT,
-        AlertDialogType.ALERT_INPUT_FLOAT,
-        AlertDialogType.ALERT_INPUT_STRING,
-        AlertDialogType.ALERT_INPUT_STRING_MULTILINE -> {
-            alertDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-            alertDialog.show()
-            editTextDialogInput?.requestFocus()
-        }
+    when (parameters.inputType) {
+        AlertDialogInputType.NONE -> dialog.show()
         else -> {
-            alertDialog.show()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            dialog.show()
+            editTextDialogInput?.requestFocus()
         }
     }
 }
 
 fun Context.showBottomDialog(
+    @LayoutRes layoutResId: Int = R.layout.bottom_dialog,
+    @LayoutRes buttonLayoutResId: Int = R.layout.item_bottom_dialog_button,
+    header: String? = null,
     cancellable: Boolean = true,
+    paddingBetweenItems: Boolean = true,
     onCancelListener: (() -> Unit)? = null,
     actions: List<BottomDialogAction>
 ) {
-    val bottomSheetDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
-    val rootView = View.inflate(this, R.layout.bottom_dialog, null)
-    bottomSheetDialog.setContentView(rootView)
-    rootView.setOnClickListener { bottomSheetDialog.cancel() }
+    val dialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
+    val rootView = View.inflate(this, layoutResId, null)
+    dialog.setContentView(rootView)
+    rootView.setOnClickListener { dialog.cancel() }
 
     val recyclerView: RecyclerView = rootView.findViewById(R.id.recyclerViewDialog)
     val itemAdapter: ItemAdapter<IItem<*>> = ItemAdapter()
@@ -128,7 +113,7 @@ fun Context.showBottomDialog(
     adapterActions.onClickListener = object : ClickListener<IItem<*>> {
         override fun invoke(v: View?, adapter: IAdapter<IItem<*>>, item: IItem<*>, position: Int): Boolean {
             return if (item is BottomDialogButtonItem) {
-                item.bottomDialogAction.callback.invoke(bottomSheetDialog)
+                item.bottomDialogAction.callback.invoke(dialog)
                 true
             } else {
                 false
@@ -139,15 +124,34 @@ fun Context.showBottomDialog(
         layoutManager = LinearLayoutManager(context)
         adapter = adapterActions
         itemAnimator = null
-        addItemDecoration(
-            EmptyDividerDecoration(
-                this@showBottomDialog,
-                R.dimen.baseline_grid_medium,
-                false
+        if (paddingBetweenItems) {
+            addItemDecoration(
+                EmptyDividerDecoration(
+                    this@showBottomDialog,
+                    R.dimen.baseline_grid_medium,
+                    false
+                )
             )
-        )
+        }
     }
-    itemAdapter.setNewList(actions.map { BottomDialogButtonItem(it) })
+    itemAdapter.setNewList(
+        actions.map {
+            BottomDialogButtonItem(
+                buttonLayoutResId = buttonLayoutResId,
+                bottomDialogAction = it
+            )
+        }
+    )
+
+    val textViewDialogHeader = rootView.findViewById<TextView>(R.id.textViewDialogHeader)
+    textViewDialogHeader?.apply {
+        if (header.isNullOrBlank()) {
+            visibility = View.GONE
+        } else {
+            visibility = View.VISIBLE
+            text = header
+        }
+    }
 
     val behavior = BottomSheetBehavior.from(rootView.parent as View)
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -155,23 +159,23 @@ fun Context.showBottomDialog(
     behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(view: View, state: Int) {
             if (state == BottomSheetBehavior.STATE_HIDDEN) {
-                bottomSheetDialog.cancel()
+                dialog.cancel()
             }
         }
 
         override fun onSlide(view: View, v: Float) {}
     })
 
-    bottomSheetDialog.setCancelable(cancellable)
-    bottomSheetDialog.setOnCancelListener {
+    dialog.setCancelable(cancellable)
+    dialog.setOnCancelListener {
         onCancelListener?.invoke()
     }
 
-    bottomSheetDialog.window
+    dialog.window
         ?.findViewById<View>(com.google.android.material.R.id.container)
         ?.fitsSystemWindows = false
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        bottomSheetDialog.window?.decorView?.let {
+        dialog.window?.decorView?.let {
             it.systemUiVisibility = it.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
@@ -186,5 +190,5 @@ fun Context.showBottomDialog(
         windowInsets
     }
 
-    bottomSheetDialog.show()
+    dialog.show()
 }

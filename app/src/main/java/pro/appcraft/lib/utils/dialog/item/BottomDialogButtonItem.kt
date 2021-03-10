@@ -2,6 +2,7 @@ package pro.appcraft.lib.utils.dialog.item
 
 import android.graphics.Typeface
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatTextView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
@@ -9,11 +10,12 @@ import pro.appcraft.lib.utils.dialog.BottomDialogAction
 import pro.appcraft.lib.utils.dialog.R
 
 class BottomDialogButtonItem(
+    @LayoutRes buttonLayoutResId: Int,
     val bottomDialogAction: BottomDialogAction
 ) : AbstractItem<BottomDialogButtonItem.ViewHolder>() {
     override val type: Int = R.id.bottomDialogButtonItem
 
-    override val layoutRes: Int = R.layout.item_bottom_dialog_button
+    override val layoutRes = buttonLayoutResId
 
     override fun getViewHolder(v: View): ViewHolder = ViewHolder(v)
 
