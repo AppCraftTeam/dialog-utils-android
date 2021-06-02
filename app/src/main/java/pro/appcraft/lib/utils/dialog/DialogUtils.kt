@@ -4,10 +4,13 @@ import android.content.Context
 import android.os.Build
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.children
+import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -170,19 +173,26 @@ fun Context.showBottomDialog(
     val behavior = BottomSheetBehavior.from(dialogView.parent as View)
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
     behavior.skipCollapsed = true
-    behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-        override fun onStateChanged(view: View, state: Int) {
-            if (state == BottomSheetBehavior.STATE_HIDDEN) {
-                dialog.cancel()
+    behavior.addBottomSheetCallback(
+        object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(view: View, state: Int) {
+                if (state == BottomSheetBehavior.STATE_HIDDEN) {
+                    dialog.cancel()
+                }
             }
-        }
 
-        override fun onSlide(view: View, v: Float) {}
-    })
+            override fun onSlide(view: View, v: Float) = Unit
+        }
+    )
 
     dialog.window
         ?.findViewById<View>(com.google.android.material.R.id.container)
-        ?.fitsSystemWindows = false
+        ?.let { container ->
+            container.fitsSystemWindows = false
+            (container as? ViewGroup)?.children?.forEach {
+                it.fitsSystemWindows = false
+            }
+        }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         dialog.window?.decorView?.let {
             it.systemUiVisibility = it.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
@@ -190,12 +200,7 @@ fun Context.showBottomDialog(
     }
     dialogView.findViewById<View>(parameters.contentViewId)?.apply {
         setOnApplyWindowInsetsListener { _, windowInsets ->
-            setPaddingRelative(
-                paddingStart,
-                paddingTop,
-                paddingEnd,
-                windowInsets.systemWindowInsetBottom
-            )
+            updatePadding(bottom = windowInsets.systemWindowInsetBottom)
             windowInsets
         }
     }

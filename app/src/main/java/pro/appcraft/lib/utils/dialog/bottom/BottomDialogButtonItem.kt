@@ -23,13 +23,10 @@ class BottomDialogButtonItem(
 
         override fun bindView(item: BottomDialogButtonItem, payloads: List<Any>) {
             textViewName.text = item.bottomDialogAction.text
-            if (item.bottomDialogAction.selected == true) {
-                textViewName.setTypeface(textViewName.typeface, Typeface.BOLD)
-            } else {
-                textViewName.setTypeface(textViewName.typeface, Typeface.NORMAL)
-            }
+            val typeface = if (item.bottomDialogAction.selected == true) Typeface.BOLD else Typeface.NORMAL
+            textViewName.setTypeface(textViewName.typeface, typeface)
         }
 
-        override fun unbindView(item: BottomDialogButtonItem) { }
+        override fun unbindView(item: BottomDialogButtonItem) = Unit
     }
 }
